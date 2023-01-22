@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "@playwright/test": "^1.29.2"
+  },
+  "private": true,
+  "scripts": {
+    "pretest": "npx playwright install chromium",
+    "test": "npx playwright test --browser chromium"
+  }
+}
