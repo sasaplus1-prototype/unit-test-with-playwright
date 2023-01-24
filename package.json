@@ -1,6 +1,10 @@
 {
   "devDependencies": {
-    "@playwright/test": "^1.29.2"
+    "@playwright/test": "^1.29.2",
+    "@tsconfig/strictest": "^1.0.2",
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.9.4",
+    "webpack": "^5.75.0"
   },
   "private": true,
   "scripts": {

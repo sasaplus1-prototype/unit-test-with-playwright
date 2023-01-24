@@ -1,29 +1,52 @@
-import fs from 'node:fs';
+import * as path from 'node:path';
+import * as fs from 'node:fs';
 
+import { webpack } from 'webpack';
 import { test, expect } from '@playwright/test';
 
-test('test1', async function({ page }) {
-  await page.goto('https://example.com/');
-  await page.setContent(`
-    <script>window.result = 1;</script>
-  `);
+import type { sum } from './index';
 
-  const result = await page.evaluate(function() {
-    return window.result;
-  });
+declare global {
+  interface Window {
+    // sum: typeof import('./index').sum
+    sum: typeof sum
+  }
+}
 
-  await expect(result).toBe(1);
+const compiler = webpack({
+  context: __dirname,
+  devtool: false,
+  mode: 'development',
+  module: {
+    rules: [
+      { test: /\.ts$/, loader: 'ts-loader' }
+    ]
+  },
+  entry: './index.ts',
+  output: {
+    filename: 'index.js',
+    path: path.resolve(__dirname),
+    libraryTarget: 'window'
+  },
 });
 
-test('test2', async function({ page }) {
+test('test', async function({ page }) {
+  await new Promise(function(resolve, reject) {
+    compiler.run(function(err, res) {
+      err ? reject(err) : resolve(res);
+    });
+  });
+
+  const script = fs.readFileSync('./index.js', 'utf8');
+
   await page.goto('https://example.com/');
   await page.setContent(`
-    <script>${fs.readFileSync('./index.js', 'utf8')}</script>
+    <script>${script}</script>
   `);
 
   const result = await page.evaluate(function() {
-    return window.result;
+    return window.sum(1, 3);
   });
 
-  await expect(result).toBe(5);
+  await expect(result).toBe(4);
 });
