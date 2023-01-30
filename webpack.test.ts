@@ -13,8 +13,10 @@ declare global {
 test.describe('test', function() {
   test.beforeEach(async function({ page }) {
     await page.goto('index.html');
-    await page.addScriptTag({ path: './dist/webpack-a1.js' })
-    await page.addScriptTag({ path: './dist/webpack-b1.js' })
+    await page.addScriptTag({ url: '/dist/webpack-a1.js' })
+    await page.addScriptTag({ url: '/dist/webpack-b1.js' })
+    // await page.addScriptTag({ path: './dist/webpack-a1.js' })
+    // await page.addScriptTag({ path: './dist/webpack-b1.js' })
   });
 
   test('test-1', async function({ page }) {

@@ -28,8 +28,10 @@ test.describe('test', function() {
     await build('./b-1.ts', 'b1');
 
     await page.goto('index.html');
-    await page.addScriptTag({ path: './dist/esbuild-a-1.js' })
-    await page.addScriptTag({ path: './dist/esbuild-b-1.js' })
+    await page.addScriptTag({ url: '/dist/esbuild-a-1.js' })
+    await page.addScriptTag({ url: '/dist/esbuild-b-1.js' })
+    // await page.addScriptTag({ path: './dist/esbuild-a-1.js' })
+    // await page.addScriptTag({ path: './dist/esbuild-b-1.js' })
   });
 
   test('test-1', async function({ page }) {
