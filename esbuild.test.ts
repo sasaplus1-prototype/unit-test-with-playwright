@@ -1,13 +1,10 @@
-import type { a1 as a1Fn } from './a-1';
-import type { b1 as b1Fn } from './b-1';
-
 import * as esbuild from 'esbuild';
 
 import { test, expect } from '@playwright/test';
 
-type Win = {
-  a1: { a1: typeof a1Fn };
-  b1: { b1: typeof b1Fn };
+type Modules = {
+  a1: typeof import('./a-1');
+  b1: typeof import('./b-1');
 };
 
 async function build(filePath: string, globalName: string): Promise<void> {
@@ -36,10 +33,10 @@ test.describe('test', function() {
 
   test('test-1', async function({ page }) {
     const result = await page.evaluate(function() {
-      const w = window as unknown as Win;
+      const { a1: A1, b1: B1 } = window as unknown as Modules;
 
-      const { a1 } = w.a1;
-      const { b1 } = w.b1;
+      const { a1 } = A1;
+      const { b1 } = B1;
 
       return {
         a1: a1(100, 200),
